@@ -1,25 +1,28 @@
-<form [formGroup]="courseForm">
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
 
-  <input formControlName="title" />
+  <input formControlName="title" placeholder="Title" />
   <span class="text-danger" *ngIf="title?.touched && title?.invalid">
     Invalid title
   </span>
 
-  <textarea formControlName="description"></textarea>
+  <textarea formControlName="description" placeholder="Description"></textarea>
   <span class="text-danger" *ngIf="description?.touched && description?.invalid">
     Invalid description
   </span>
 
-  <input type="number" formControlName="duration" />
+  <input type="number" formControlName="duration" placeholder="Duration" />
   <span class="text-danger" *ngIf="duration?.touched && duration?.invalid">
     Invalid duration
   </span>
 
-  <input formControlName="author" />
-  <button type="button" (click)="addAuthor()">Add author</button>
-  <span class="text-danger" *ngIf="author?.touched && author?.invalid">
-    Invalid author
-  </span>
+  <!-- New author input -->
+  <div formGroupName="newAuthor">
+    <input formControlName="author" placeholder="New author" />
+    <button type="button" (click)="addAuthor()">Add author</button>
+    <span class="text-danger" *ngIf="author?.touched && author?.invalid">
+      Invalid author
+    </span>
+  </div>
 
-  <button type="submit" (click)="onSubmit()">Submit</button>
+  <button type="submit">Submit</button>
 </form>

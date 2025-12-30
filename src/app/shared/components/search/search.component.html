@@ -1,2 +1,9 @@
-<input [placeholder]="placeholder" [(ngModel)]="searchTerm" />
-<button (click)="onSearch()">Search</button>
+<form (ngSubmit)="onSearch()">
+  <input
+    type="text"
+    [(ngModel)]="searchTerm"
+    name="searchTerm"
+    [placeholder]="placeholder"
+  />
+  <button type="submit">Search</button>
+</form>

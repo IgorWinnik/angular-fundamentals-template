@@ -10,7 +10,9 @@ export class SearchComponent {
 
   searchTerm = '';
 
-  onSearch() {
-    this.search.emit(this.searchTerm);
+  onSearch(): void {
+    if (this.searchTerm.trim()) {
+      this.search.emit(this.searchTerm.trim());
+    }
   }
 }

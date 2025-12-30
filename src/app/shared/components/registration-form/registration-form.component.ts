@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 })
 export class RegistrationFormComponent {
   registrationForm: FormGroup;
+  submitted = false;
 
   constructor(private fb: FormBuilder) {
     this.registrationForm = this.fb.group({
@@ -23,15 +24,16 @@ export class RegistrationFormComponent {
 
   shouldShowError(controlName: string): boolean {
     const control = this.f[controlName];
-    return control.touched && control.invalid;
+    return control.invalid && (control.touched || this.submitted);
   }
 
   onSubmit(): void {
-    Object.values(this.registrationForm.controls)
-      .forEach(control => control.markAsTouched());
+    this.submitted = true;
 
-    if (this.registrationForm.valid) {
-      console.log(this.registrationForm.value);
+    if (this.registrationForm.invalid) {
+      return;
     }
+
+    console.log(this.registrationForm.value);
   }
 }

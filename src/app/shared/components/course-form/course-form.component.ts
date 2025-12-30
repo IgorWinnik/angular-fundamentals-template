@@ -1,11 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormArray,
-  AbstractControl,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-course-form',
@@ -15,7 +9,6 @@ export class CourseFormComponent {
   submitted = false;
 
   courseForm: FormGroup;
-  newAuthorGroup: FormGroup;
 
   allAuthors: { name: string }[] = [
     { name: 'John Doe' },
@@ -30,13 +23,9 @@ export class CourseFormComponent {
       description: ['', [Validators.required, Validators.minLength(2)]],
       duration: [0, [Validators.required, Validators.min(0)]],
       authors: this.fb.array([]),
-    });
-
-    this.newAuthorGroup = this.fb.group({
-      author: [
-        '',
-        [Validators.required, Validators.pattern(/^[a-zA-Z0-9 ]{2,}$/)],
-      ],
+      newAuthor: this.fb.group({
+        author: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9 ]{2,}$/)]],
+      }),
     });
   }
 
@@ -59,17 +48,15 @@ export class CourseFormComponent {
   }
 
   get author(): AbstractControl | null {
-    return this.newAuthorGroup.get('author');
+    return this.courseForm.get('newAuthor.author');
   }
 
   // ===== logic =====
 
   addAuthor(): void {
-    if (!this.author) return;
+    if (!this.author || this.author.invalid) return;
 
     const authorName = this.author.value;
-
-    if (this.newAuthorGroup.invalid || !authorName) return;
 
     const newAuthor = { name: authorName };
 
@@ -78,10 +65,7 @@ export class CourseFormComponent {
 
     this.authors.push(
       this.fb.group({
-        author: [
-          authorName,
-          [Validators.required, Validators.pattern(/^[a-zA-Z0-9 ]{2,}$/)],
-        ],
+        author: [authorName, [Validators.required, Validators.pattern(/^[a-zA-Z0-9 ]{2,}$/)]],
       })
     );
 
@@ -94,10 +78,7 @@ export class CourseFormComponent {
 
     this.authors.push(
       this.fb.group({
-        author: [
-          author.name,
-          [Validators.required, Validators.minLength(2)],
-        ],
+        author: [author.name, [Validators.required, Validators.minLength(2)]],
       })
     );
   }
@@ -112,6 +93,7 @@ export class CourseFormComponent {
     this.submitted = true;
 
     if (this.courseForm.invalid) {
+      this.courseForm.markAllAsTouched();
       return;
     }
 

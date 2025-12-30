@@ -1,4 +1,5 @@
 <h2 class="text-align-center">Registration</h2>
+
 <div class="app-plate">
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <div class="registration-form">
@@ -28,6 +29,9 @@
       </div>
 
       <button type="submit">Register</button>
+
+      <a routerLink="/login">Already have an account? Login</a>
+
     </div>
   </form>
 </div>
