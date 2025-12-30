@@ -1,4 +1,2 @@
-<div class="app-search">
-  <input type="text" placeholder="Input text">
-  <app-button></app-button>
-</div>
+<input [placeholder]="placeholder" [(ngModel)]="searchTerm" />
+<button (click)="onSearch()">Search</button>

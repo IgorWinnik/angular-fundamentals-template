@@ -1,28 +1,33 @@
 <h2 class="text-align-center">Registration</h2>
 <div class="app-plate">
-  <div class="registration-form">
-    <div>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <div class="registration-form">
+
       <div class="form__control">
-        <label for="name">Name</label>
-        <!--Use the name `name` for the form control.-->
-        <input type="text" id="name" placeholder="Input text"/>
-        <span id="nameErrorMessage" class="text-danger">Name is required.</span>
+        <label>Name</label>
+        <input type="text" formControlName="name" />
+        <span class="text-danger" *ngIf="shouldShowError('name')">
+          Invalid name
+        </span>
       </div>
+
       <div class="form__control">
-        <!--Use the name `email` for the form control.-->
-        <label for="email">Email</label>
-        <input type="text" id="email" placeholder="Input text"/>
-        <span id="emailErrorMessage" class="text-danger">Email is required.</span>
+        <label>Email</label>
+        <input type="text" formControlName="email" emailValidator />
+        <span class="text-danger" *ngIf="shouldShowError('email')">
+          Invalid email
+        </span>
       </div>
+
       <div class="form__control">
-        <!--Use the name `password` for the form control.-->
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Input text"/>
-        <span id="passwordErrorMessage" class="text-danger">Password is required.</span>
+        <label>Password</label>
+        <input type="password" formControlName="password" />
+        <span class="text-danger" *ngIf="shouldShowError('password')">
+          Invalid password
+        </span>
       </div>
+
+      <button type="submit">Register</button>
     </div>
-    <div class="form__action">
-      <app-button></app-button>
-    </div>
-  </div>
+  </form>
 </div>

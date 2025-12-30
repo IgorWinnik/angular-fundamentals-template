@@ -1,42 +1,67 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class CoursesService {
-    getAll() {
-        // Add your code here
-    }
 
-    createCourse(course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  private readonly apiUrl = 'http://localhost:4000/api';
 
-    editCourse(id: string, course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  constructor(private http: HttpClient) {}
 
-    getCourse(id: string) {
-        // Add your code here
-    }
+  // ===== COURSES =====
+  getAll(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/courses/all`);
+  }
 
-    deleteCourse(id: string) {
-        // Add your code here
-    }
+  createCourse(course: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/courses/add`, course);
+  }
 
-    filterCourses(value: string) {
-        // Add your code here
-    }
+  editCourse(id: string, course: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/courses/${id}`, course);
+  }
 
-    getAllAuthors() {
-        // Add your code here
-    }
+  getCourse(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/courses/${id}`);
+  }
 
-    createAuthor(name: string) {
-        // Add your code here
-    }
+  deleteCourse(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/courses/${id}`);
+  }
 
-    getAuthorById(id: string) {
-        // Add your code here
-    }
+  filterCourses(filters: {
+    title?: string[];
+    description?: string[];
+    duration?: string[];
+    creationDate?: string[];
+  }): Observable<any[]> {
+    let params = new HttpParams();
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && value.length) {
+        value.forEach(v => {
+          params = params.append(key, v); // для масивів multiple query params
+        });
+      }
+    });
+
+    return this.http.get<any[]>(`${this.apiUrl}/courses/filter`, { params });
+  }
+
+
+  // ===== AUTHORS =====
+  getAllAuthors(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/authors/all`);
+  }
+
+  createAuthor(name: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/authors/add`, { name });
+  }
+
+  getAuthorById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/authors/${id}`);
+  }
 }

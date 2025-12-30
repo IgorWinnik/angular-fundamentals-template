@@ -1,42 +1,68 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, finalize } from 'rxjs';
+import { CoursesService } from './courses.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class CoursesStoreService {
-    getAll(){
-        // Add your code here
-    }
 
-    createCourse(course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  private courses$$ = new BehaviorSubject<any[]>([]);
+  private isLoading$$ = new BehaviorSubject<boolean>(false);
 
-    getCourse(id: string) {
-        // Add your code here
-    }
+  public courses$ = this.courses$$.asObservable();
+  public isLoading$ = this.isLoading$$.asObservable();
 
-    editCourse(id: string, course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  constructor(private coursesService: CoursesService) {}
 
-    deleteCourse(id: string) {
-        // Add your code here
-    }
+  getAll(): void {
+    this.isLoading$$.next(true);
+    this.coursesService.getAll()
+      .pipe(finalize(() => this.isLoading$$.next(false)))
+      .subscribe((courses: any[]) => this.courses$$.next(courses));
+  }
 
-    filterCourses(value: string) {
-        // Add your code here
-    }
+  createCourse(course: any): void {
+    this.coursesService.createCourse(course).subscribe(() => {
+      this.getAll();
+    });
+  }
 
-    getAllAuthors() {
-        // Add your code here
-    }
+  getCourse(id: string) {
+    return this.coursesService.getCourse(id);
+  }
 
-    createAuthor(name: string) {
-        // Add your code here
-    }
+  editCourse(id: string, course: any): void {
+    this.coursesService.editCourse(id, course).subscribe(() => {
+      this.getAll();
+    });
+  }
 
-    getAuthorById(id: string) {
-        // Add your code here
-    }
+  deleteCourse(id: string): void {
+    this.coursesService.deleteCourse(id).subscribe(() => {
+      this.getAll();
+    });
+  }
+
+  filterCourses(value: string): void {
+    this.isLoading$$.next(true);
+
+    this.coursesService.filterCourses({
+      title: [value]
+    })
+    .pipe(finalize(() => this.isLoading$$.next(false)))
+    .subscribe((courses: any[]) => this.courses$$.next(courses));
+  }
+
+  getAllAuthors() {
+    return this.coursesService.getAllAuthors();
+  }
+
+  createAuthor(name: string) {
+    return this.coursesService.createAuthor(name);
+  }
+
+  getAuthorById(id: string) {
+    return this.coursesService.getAuthorById(id);
+  }
 }

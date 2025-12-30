@@ -32,3 +32,9 @@
     }
   }
 }
+
+.course-card__info-actions {
+  display: flex;
+  gap: 0.5rem; /* або 8px */
+  margin-top: 1rem;
+}

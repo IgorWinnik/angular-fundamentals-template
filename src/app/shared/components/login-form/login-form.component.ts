@@ -1,12 +1,26 @@
-import { Component, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent {
-  @ViewChild("loginForm") public loginForm!: NgForm;
-  //Use the names `email` and `password` for form controls.
+  loginForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.loginForm = this.fb.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+  }
+
+  get f() {
+    return this.loginForm.controls;
+  }
+
+  onSubmit() {
+    Object.values(this.loginForm.controls)
+      .forEach(control => control.markAsTouched());
+  }
 }
