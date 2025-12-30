@@ -4,7 +4,7 @@
 
   <div class="form__control">
     <!-- Додано emailValidator директиву -->
-    <input type="text" formControlName="email" emailValidator />
+    <input type="text" formControlName="email" appEmail />
     <span class="text-danger" *ngIf="shouldShowError('email')">
       Invalid email
     </span>
