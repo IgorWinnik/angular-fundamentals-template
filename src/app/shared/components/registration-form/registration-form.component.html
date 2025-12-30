@@ -4,27 +4,30 @@
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <div class="registration-form">
 
+      <!-- Name -->
       <div class="form__control">
         <label>Name</label>
         <input type="text" formControlName="name" />
         <span class="text-danger" *ngIf="shouldShowError('name')">
-          Invalid name
+          Name must be at least 2 characters
         </span>
       </div>
 
+      <!-- Email -->
       <div class="form__control">
         <label>Email</label>
-        <input type="text" formControlName="email" emailValidator />
+        <input type="email" formControlName="email" />
         <span class="text-danger" *ngIf="shouldShowError('email')">
-          Invalid email
+          Enter a valid email
         </span>
       </div>
 
+      <!-- Password -->
       <div class="form__control">
         <label>Password</label>
         <input type="password" formControlName="password" />
         <span class="text-danger" *ngIf="shouldShowError('password')">
-          Invalid password
+          Password must be at least 6 characters
         </span>
       </div>
 

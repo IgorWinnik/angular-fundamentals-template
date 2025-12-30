@@ -1,17 +1,17 @@
 <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
 
   <input formControlName="title" placeholder="Title" />
-  <span class="text-danger" *ngIf="title?.touched && title?.invalid">
+  <span class="text-danger" *ngIf="shouldShowError(title)">
     Invalid title
   </span>
 
   <textarea formControlName="description" placeholder="Description"></textarea>
-  <span class="text-danger" *ngIf="description?.touched && description?.invalid">
+  <span class="text-danger" *ngIf="shouldShowError(description)">
     Invalid description
   </span>
 
   <input type="number" formControlName="duration" placeholder="Duration" />
-  <span class="text-danger" *ngIf="duration?.touched && duration?.invalid">
+  <span class="text-danger" *ngIf="shouldShowError(duration)">
     Invalid duration
   </span>
 
@@ -19,9 +19,30 @@
   <div formGroupName="newAuthor">
     <input formControlName="author" placeholder="New author" />
     <button type="button" (click)="addAuthor()">Add author</button>
-    <span class="text-danger" *ngIf="author?.touched && author?.invalid">
+    <span class="text-danger" *ngIf="shouldShowError(author)">
       Invalid author
     </span>
+  </div>
+
+  <!-- Authors lists -->
+  <div>
+    <h4>All authors</h4>
+    <ul>
+      <li *ngFor="let a of allAuthors">
+        {{ a.name }}
+        <button type="button" (click)="moveToCourse(a)">Add</button>
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <h4>Course authors</h4>
+    <ul>
+      <li *ngFor="let a of courseAuthors; let i = index">
+        {{ a.name }}
+        <button type="button" (click)="removeFromCourse(a, i)">Remove</button>
+      </li>
+    </ul>
   </div>
 
   <button type="submit">Submit</button>

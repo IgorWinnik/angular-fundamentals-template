@@ -2,21 +2,15 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
   <div class="form__control">
-    <input type="text" formControlName="email" emailValidator />
-    <span
-      class="text-danger"
-      *ngIf="f['email'].touched && f['email'].invalid"
-    >
+    <input type="email" formControlName="email" />
+    <span class="text-danger" *ngIf="shouldShowError('email')">
       Invalid email
     </span>
   </div>
 
   <div class="form__control">
     <input type="password" formControlName="password" />
-    <span
-      class="text-danger"
-      *ngIf="f['password'].touched && f['password'].invalid"
-    >
+    <span class="text-danger" *ngIf="shouldShowError('password')">
       Invalid password
     </span>
   </div>
