@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  Validators,
+  AbstractControl
+} from '@angular/forms';
 
 @Component({
   selector: 'app-course-form',
@@ -10,31 +16,52 @@ export class CourseFormComponent {
 
   courseForm: FormGroup;
 
-  allAuthors: { name: string; id: number }[] = [
+  allAuthors = [
     { id: 1, name: 'John Doe' },
     { id: 2, name: 'Jane Smith' },
   ];
 
-  courseAuthors: { name: string; id: number }[] = [];
+  courseAuthors: { id: number; name: string }[] = [];
 
   constructor(private fb: FormBuilder) {
     this.courseForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(2)]],
       duration: [0, [Validators.required, Validators.min(0)]],
-      authors: this.fb.array([]), // FormArray of course authors
-      newAuthor: this.fb.group({
-        author: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9 ]{2,}$/)]],
-      }),
+
+      // 🔑 author має бути тут
+      author: [
+        '',
+        [
+          Validators.minLength(2),
+          Validators.pattern(/^[A-Za-z ]+$/),
+        ],
+      ],
+
+      authors: this.fb.array([]),
     });
   }
 
   // ===== getters =====
-  get title(): AbstractControl | null { return this.courseForm.get('title'); }
-  get description(): AbstractControl | null { return this.courseForm.get('description'); }
-  get duration(): AbstractControl | null { return this.courseForm.get('duration'); }
-  get authors(): FormArray { return this.courseForm.get('authors') as FormArray; }
-  get author(): AbstractControl | null { return this.courseForm.get('newAuthor.author'); }
+  get title(): AbstractControl | null {
+    return this.courseForm.get('title');
+  }
+
+  get description(): AbstractControl | null {
+    return this.courseForm.get('description');
+  }
+
+  get duration(): AbstractControl | null {
+    return this.courseForm.get('duration');
+  }
+
+  get author(): AbstractControl | null {
+    return this.courseForm.get('author');
+  }
+
+  get authors(): FormArray {
+    return this.courseForm.get('authors') as FormArray;
+  }
 
   shouldShowError(control: AbstractControl | null): boolean {
     return !!control && control.invalid && (control.touched || this.submitted);
@@ -42,23 +69,27 @@ export class CourseFormComponent {
 
   // ===== logic =====
   addAuthor(): void {
-    if (!this.author || this.author.invalid) return;
+    if (!this.author || this.author.invalid || !this.author.value) {
+      return;
+    }
 
-    const newAuthorObj = { id: Date.now(), name: this.author.value };
+    const newAuthor = {
+      id: Date.now(),
+      name: this.author.value,
+    };
 
-    this.allAuthors.push(newAuthorObj);
-    this.courseAuthors.push(newAuthorObj);
+    this.courseAuthors.push(newAuthor);
 
     this.authors.push(
       this.fb.group({
-        name: [newAuthorObj.name, [Validators.required, Validators.minLength(2)]],
+        name: [newAuthor.name, [Validators.required, Validators.minLength(2)]],
       })
     );
 
     this.author.reset();
   }
 
-  moveToCourse(author: { name: string; id: number }): void {
+  moveToCourse(author: { id: number; name: string }): void {
     this.courseAuthors.push(author);
     this.allAuthors = this.allAuthors.filter(a => a.id !== author.id);
 
@@ -69,7 +100,7 @@ export class CourseFormComponent {
     );
   }
 
-  removeFromCourse(author: { name: string; id: number }, index: number): void {
+  removeFromCourse(author: { id: number; name: string }, index: number): void {
     this.courseAuthors.splice(index, 1);
     this.allAuthors.push(author);
     this.authors.removeAt(index);
@@ -79,8 +110,10 @@ export class CourseFormComponent {
     this.submitted = true;
     this.courseForm.markAllAsTouched();
 
-    if (this.courseForm.invalid) return;
+    if (this.courseForm.invalid) {
+      return;
+    }
 
-    console.log('Course submitted:', this.courseForm.value);
+    console.log('Course submitted', this.courseForm.value);
   }
 }

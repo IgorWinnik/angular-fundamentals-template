@@ -2,7 +2,7 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
   <div class="form__control">
-    <input type="email" formControlName="email" />
+    <input type="text" formControlName="email" />
     <span class="text-danger" *ngIf="shouldShowError('email')">
       Invalid email
     </span>

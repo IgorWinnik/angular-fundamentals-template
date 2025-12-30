@@ -9,14 +9,18 @@
         <label>Name</label>
         <input type="text" formControlName="name" />
         <span class="text-danger" *ngIf="shouldShowError('name')">
-          Name must be at least 2 characters
+          Name must be at least 6 characters
         </span>
       </div>
 
       <!-- Email -->
       <div class="form__control">
         <label>Email</label>
-        <input type="email" formControlName="email" />
+        <input
+          type="email"
+          formControlName="email"
+          appEmail
+        />
         <span class="text-danger" *ngIf="shouldShowError('email')">
           Enter a valid email
         </span>
@@ -33,7 +37,9 @@
 
       <button type="submit">Register</button>
 
-      <a routerLink="/login">Already have an account? Login</a>
+      <a routerLink="/login">
+        Already have an account? Login
+      </a>
 
     </div>
   </form>

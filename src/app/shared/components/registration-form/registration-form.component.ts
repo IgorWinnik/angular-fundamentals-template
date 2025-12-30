@@ -7,13 +7,14 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
   styleUrls: ['./registration-form.component.scss']
 })
 export class RegistrationFormComponent {
+
   registrationForm: FormGroup;
   submitted = false;
 
   constructor(private fb: FormBuilder) {
     this.registrationForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
+      name: ['', [Validators.required, Validators.minLength(6)]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
@@ -33,7 +34,5 @@ export class RegistrationFormComponent {
     if (this.registrationForm.invalid) {
       return;
     }
-
-    console.log(this.registrationForm.value);
   }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EmailValidatorDirective } from '@shared/directives/email.directive';
 
 @Component({
   selector: 'app-login-form',
@@ -11,12 +12,12 @@ export class LoginFormComponent {
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      email: ['', [Validators.required, EmailValidatorDirective.prototype.validate]],
+      password: ['', Validators.required],
     });
   }
 
-  get f(): { [key: string]: AbstractControl } {
+  get f() {
     return this.loginForm.controls;
   }
 
@@ -25,12 +26,12 @@ export class LoginFormComponent {
     return control.invalid && (control.touched || this.submitted);
   }
 
-  onSubmit(): void {
+  onSubmit() {
     this.submitted = true;
     this.loginForm.markAllAsTouched();
 
     if (this.loginForm.invalid) return;
 
-    console.log('Login form value:', this.loginForm.value);
+    console.log('Login data:', this.loginForm.value);
   }
 }

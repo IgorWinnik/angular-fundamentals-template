@@ -15,25 +15,12 @@
     Invalid duration
   </span>
 
-  <!-- New author input -->
-  <div formGroupName="newAuthor">
-    <input formControlName="author" placeholder="New author" />
-    <button type="button" (click)="addAuthor()">Add author</button>
-    <span class="text-danger" *ngIf="shouldShowError(author)">
-      Invalid author
-    </span>
-  </div>
-
-  <!-- Authors lists -->
-  <div>
-    <h4>All authors</h4>
-    <ul>
-      <li *ngFor="let a of allAuthors">
-        {{ a.name }}
-        <button type="button" (click)="moveToCourse(a)">Add</button>
-      </li>
-    </ul>
-  </div>
+  <!-- Author -->
+  <input formControlName="author" placeholder="New author" />
+  <button type="button" (click)="addAuthor()">Add author</button>
+  <span class="text-danger" *ngIf="shouldShowError(author)">
+    Invalid author
+  </span>
 
   <div>
     <h4>Course authors</h4>
