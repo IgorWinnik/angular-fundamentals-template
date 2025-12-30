@@ -1,8 +1,10 @@
+<!-- login-form.component.html -->
 <h2>Login</h2>
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
   <div class="form__control">
-    <input type="text" formControlName="email" />
+    <!-- Додано emailValidator директиву -->
+    <input type="text" formControlName="email" emailValidator />
     <span class="text-danger" *ngIf="shouldShowError('email')">
       Invalid email
     </span>

@@ -1,6 +1,6 @@
+// login-form.component.ts
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmailValidatorDirective } from '@shared/directives/email.directive';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-login-form',
@@ -12,21 +12,24 @@ export class LoginFormComponent {
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, EmailValidatorDirective.prototype.validate]],
+      email: ['', Validators.required], // кастомний валідатор буде через директиву
       password: ['', Validators.required],
     });
   }
 
-  get f() {
+  // Геттер для доступу до контролів
+  get f(): { [key: string]: AbstractControl } {
     return this.loginForm.controls;
   }
 
+  // Показ помилок
   shouldShowError(controlName: string): boolean {
     const control = this.f[controlName];
-    return control.invalid && (control.touched || this.submitted);
+    return !!control && control.invalid && (control.touched || this.submitted);
   }
 
-  onSubmit() {
+  // Обробка сабміту
+  onSubmit(): void {
     this.submitted = true;
     this.loginForm.markAllAsTouched();
 
